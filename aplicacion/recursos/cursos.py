@@ -60,10 +60,11 @@ class Cursos(Resource):
                 400
             )
 
-        if not ProfesorModel.buscar_por_rut(rut_profesor):
+        profesor = ProfesorModel.buscar_por_rut(rut_profesor)
+        if not profesor:
             return ({'message': 'El identificador del profesor ingresado no es válido'}, 400)
 
-        curso = CursoModel(nombre, nivel, rut_profesor)
+        curso = CursoModel(nombre, profesor.id, nivel)
 
         if activo is not None:
             curso.activo = activo

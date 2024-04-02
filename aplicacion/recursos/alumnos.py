@@ -148,6 +148,7 @@ class Alumnos(Resource):
         alumno_nombres = data['nombres']
         alumno_apellidos = data['apellidos']
         alumno_rut = data['rut']
+        activo = data['activo']
 
         alumno = AlumnoModel.buscar_existencia(
             alumno_rut
@@ -160,6 +161,9 @@ class Alumnos(Resource):
         alumno.nombres = alumno_nombres or alumno.nombres
         alumno.apellidos = alumno_apellidos or alumno.apellidos
         alumno.rut = alumno_rut or alumno.rut
+
+        if activo is not None:
+            alumno.activo = activo
 
         try:
             alumno.guardar()

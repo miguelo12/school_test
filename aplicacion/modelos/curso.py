@@ -57,22 +57,23 @@ class CursoModel(db.Model):
     )
 
     # Se crea el objeto profesor
-    profesor: Mapped['ProfesorModel'] = relationship(backref='curso')
+    profesor: Mapped['ProfesorModel'] = relationship(backref='cursos')
 
     # Se crea el objeto de alumnos.
     alumnos: Mapped[List['AlumnoModel']] = relationship(
         'AlumnoModel',
-        secondary=curso_alumno
+        secondary=curso_alumno,
+        backref='cursos'
     )
 
     def __init__(
             self,
             nombre: str,
-            id_profesor: int,
+            profesor_id: int,
             nivel: int,
             inactive: bool = False):
         self.nombre = nombre
-        self.id_profesor = id_profesor
+        self.profesor_id = profesor_id
         self.nivel = nivel
 
         if inactive:
@@ -83,7 +84,7 @@ class CursoModel(db.Model):
         a
         """
         data_profesor = {
-            'id': self.id_profesor,
+            'id': self.profesor_id,
             'nombres': self.profesor.nombres,
             'apellidos': self.profesor.apellidos
         }
@@ -92,7 +93,7 @@ class CursoModel(db.Model):
             'nombre': self.nombre,
             'nivel': self.nivel,
             'activo': self.activo,
-            'fecha_creacion': self.fecha_creacion,
+            'fecha_creacion': Utilidades.formato_fecha(self.fecha_creacion),
             'profesor': data_profesor
         }
 
@@ -101,7 +102,7 @@ class CursoModel(db.Model):
         Entrega los datos como diccionario
         """
         data_profesor = {
-            'id': self.id_profesor,
+            'id': self.profesor_id,
             'nombres': self.profesor.nombres,
             'apellidos': self.profesor.apellidos
         }
@@ -125,14 +126,14 @@ class CursoModel(db.Model):
         }
 
     @classmethod
-    def buscar_por_nombre(cls, nombre):
+    def buscar_por_nombre(cls, nombre: str):
         """
         Busca el curso mediante el nombre
         """
         return cls.query.filter_by(nombre=nombre).first()
 
     @classmethod
-    def buscar_existencia(cls, nombre):
+    def buscar_existencia(cls, nombre: str):
         """
         Busca si existe el curso mediante el nombre
         """

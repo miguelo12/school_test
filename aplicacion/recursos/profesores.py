@@ -78,7 +78,7 @@ class Profesores(Resource):
         if not profesor:
             return ({'message': 'No se pudo resolver su petición.'}, 400)
 
-        profesor.nombress = data['nombres']
+        profesor.nombres = data['nombres']
         profesor.apellidos = data['apellidos']
 
         activo = data['activo']

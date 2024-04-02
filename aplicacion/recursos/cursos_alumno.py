@@ -24,14 +24,14 @@ class CursosAlumno(Resource):
         lista_cursos = {}
         for curso in cursos:
             data_profesor = {
-                'id': curso.id_profesor,
+                'id': curso.profesor_id,
                 'nombres': curso.profesor.nombres,
                 'apellidos': curso.profesor.apellidos
             }
             lista_cursos[curso.id] = {
                 "nombre": curso.nombre,
                 "nivel": curso.nivel,
-                "id_profesor": curso.id_profesor,
+                "profesor_id": curso.profesor_id,
                 "profesor": data_profesor
             }
 

@@ -73,7 +73,7 @@ class AlumnoModel(db.Model):
         """
         Busca si existe el alumno
         """
-        return cls.query.filter_by(rut=rut).exists().first()
+        return cls.query.filter_by(rut=rut).first()
 
     def guardar(self):
         """

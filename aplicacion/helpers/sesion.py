@@ -1,5 +1,5 @@
 """
-a
+Modulo sesion
 """
 import hashlib
 import json
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 class Sesion():
     """
-    a
+    Contiene los manejos de token generacion de hash y codificacion del jwt
     """
 
     def generar_token(

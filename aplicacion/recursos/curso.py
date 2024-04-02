@@ -38,20 +38,20 @@ class Curso(Resource):
         required=False
     )
 
-    def get(self, _id):
+    def get(self, nombre):
         """
         Obtener curso
         """
-        curso = CursoModel.buscar_por_id(_id)
+        curso = CursoModel.buscar_por_nombre(nombre)
         if curso:
             return curso.obtener_datos()
         return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
 
-    def delete(self, _id):
+    def delete(self, nombre):
         """
         Elimina el curso
         """
-        curso = CursoModel.buscar_por_id(_id)
+        curso = CursoModel.buscar_por_nombre(nombre)
         if not curso:
             return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
 
@@ -61,21 +61,22 @@ class Curso(Resource):
         except Exception:
             return ({'message': 'No se pudo realizar la eliminación'}, 500)
 
-    def put(self, _id):
+    def put(self, nombre):
         """
         Actualizar curso
         """
         data = self.parser.parse_args()
-        curso_model = CursoModel.buscar_por_id(_id)
+        curso_model = CursoModel.buscar_por_nombre(nombre)
 
         if not curso_model:
             return ({'message': 'No se encontró el curso'}, 404)
 
-        if not ProfesorModel.buscar_por_rut(data['rut_profesor']):
+        profesor = ProfesorModel.buscar_por_rut(data['rut_profesor'])
+        if not profesor:
             return ({'message': 'El identificador del profesor ingresado no es válido'}, 400)
 
         curso_model.nombre = data['nombre']
-        curso_model.id_profesor = data['id_profesor']
+        curso_model.profesor_id = profesor.id
         curso_model.nivel = data['nivel']
 
         activo = data['activo']

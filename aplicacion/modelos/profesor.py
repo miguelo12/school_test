@@ -17,7 +17,7 @@ class ProfesorModel(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    nombress: Mapped[str] = mapped_column(String(100))
+    nombres: Mapped[str] = mapped_column(String(100))
     apellidos: Mapped[str] = mapped_column(String(100))
     rut: Mapped[str] = mapped_column(String(50), index=True, unique=True)
     activo: Mapped[bool] = mapped_column(default=expression.true())
@@ -48,11 +48,11 @@ class ProfesorModel(db.Model):
         return cls.query.filter_by(rut=rut).first()
 
     @classmethod
-    def buscar_existencia(cls, rut):
+    def buscar_existencia(cls, rut: str):
         """
         Busca si existe el profesor mediante el rut
         """
-        return cls.query.filter_by(nombres=rut).exists().first()
+        return cls.query.filter_by(rut=rut).first()
 
     def guardar(self):
         """
