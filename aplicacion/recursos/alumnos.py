@@ -4,7 +4,10 @@ alumnos Module
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.alumno import AlumnoModel
+from aplicacion.redis import redis_client
 
 
 class Alumnos(Resource):
@@ -38,6 +41,7 @@ class Alumnos(Resource):
         help='Debe ingresar 0 para estado inactivo y 1 para estado activo.'
     )
 
+    @authentication(redis_client, Sesion())
     def get(self):
         """
         Entrega la lista de alumnos.
@@ -52,6 +56,7 @@ class Alumnos(Resource):
         """
         return {'alumnos': list(map(lambda x: x.obtener_datos(), AlumnoModel.query.all()))}
 
+    @authentication(redis_client, Sesion())
     def post(self):
         """
         Guardar alumno
@@ -113,6 +118,7 @@ class Alumnos(Resource):
             return ({'message': f'No se pudo resolver su petición. {e}'}, 500)
         return (alumno.obtener_datos(), 201)
 
+    @authentication(redis_client, Sesion())
     def put(self):
         """
         Guardar alumno

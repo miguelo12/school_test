@@ -81,7 +81,7 @@ class CursoModel(db.Model):
 
     def obtener_datos(self):
         """
-        a
+        Entrega los datos como diccionario
         """
         data_profesor = {
             'id': self.profesor_id,

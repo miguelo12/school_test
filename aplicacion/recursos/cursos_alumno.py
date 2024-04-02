@@ -3,14 +3,17 @@ cursos_alumno Module
 """
 from flask_restful import Resource
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.alumno import AlumnoModel
+from aplicacion.redis import redis_client
 
 
 class CursosAlumno(Resource):
     """
     Recurso cursos alumno
     """
-
+    @authentication(redis_client, Sesion())
     def get(self, rut):
         """
         Obtiene los cursos del alumno

@@ -4,8 +4,11 @@ curso Module
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.curso import CursoModel
 from aplicacion.modelos.profesor import ProfesorModel
+from aplicacion.redis import redis_client
 
 
 class Curso(Resource):
@@ -38,6 +41,7 @@ class Curso(Resource):
         required=False
     )
 
+    @authentication(redis_client, Sesion())
     def get(self, nombre):
         """
         Obtener curso
@@ -47,6 +51,7 @@ class Curso(Resource):
             return curso.obtener_datos()
         return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
 
+    @authentication(redis_client, Sesion())
     def delete(self, nombre):
         """
         Elimina el curso
@@ -61,6 +66,7 @@ class Curso(Resource):
         except Exception:
             return ({'message': 'No se pudo realizar la eliminación'}, 500)
 
+    @authentication(redis_client, Sesion())
     def put(self, nombre):
         """
         Actualizar curso

@@ -34,6 +34,9 @@ class UsuarioModel(db.Model):
         """
         Entregas los datos del usuario como un diccionario
         """
+        if not self.activo:
+            return {}
+
         return {
             'id': self.id,
             'username': self.username,

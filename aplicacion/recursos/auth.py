@@ -62,27 +62,23 @@ class Auth(Resource):
         invalid = int(str(redis_invalid)) if redis_invalid else 0
 
         if invalid >= 3:
-            return {'message': 'Usuario bloqueado temporalmente'}, 400
+            return ({'message': 'Usuario bloqueado temporalmente'}, 400)
 
         jwt_secret_key = current_app.config['JWT_SECRET_KEY']
-        jwt_lifetime_days = current_app.config['JWT_LIFETIME_DAYS']
+        jwt_lifetime_hours = current_app.config['JWT_LIFETIME_HOURS']
 
         usuario_model = UsuarioModel.buscar_username(username)
 
         if not usuario_model:
-            return {'message': 'No existe el usuario'}, 400
+            return ({'message': 'No existe el usuario'}, 400)
 
         # Verifica que la contraseña sea la misma
         __, pass_session = session.generate_hash(password, usuario_model.salt)
         if pass_session == usuario_model.password:
-            # Valida si existe la sesion actual
-            if session.validar_token(redis, usuario_model.id):
-                return {'mensaje': 'Ya se inicio sesion'}, 202
-
             token = session.generar_token(
                 redis,
                 jwt_secret_key,
-                timedelta(seconds=jwt_lifetime_days),
+                timedelta(minutes=jwt_lifetime_hours),
                 usuario_model.id,
                 {
                     'usuario': usuario_model.username
@@ -114,17 +110,17 @@ class Auth(Resource):
         """
         sesion = Sesion()
         data = self.parser_delete.parse_args()
-        jwt = data['Authorization']
+        jwt_token = data['Authorization']
 
         jwt_secret_key = current_app.config['JWT_SECRET_KEY']
-        decode_jwt = sesion.decode_jwt(jwt, jwt_secret_key)
+        decode_jwt = sesion.decode_jwt(jwt_token, jwt_secret_key)
         username = decode_jwt.get('usuario')
 
         user_model = UsuarioModel.buscar_username(username)
         if not user_model:
             return ({'mensaje': 'No existe este usuario, para cerrar la sesion'}, 404)
 
-        if sesion.eliminar_token(redis, user_model.id):
+        if sesion.eliminar_token(redis, jwt_token):
             return {'message': 'Se cerro la sesion'}
 
         return ({'message': 'No se pudo cerrar sesion'}, 500)

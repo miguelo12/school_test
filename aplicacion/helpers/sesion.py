@@ -31,34 +31,34 @@ class Sesion():
         data: Dict
     ):
         """
-        a
+        Genera el token de acceso y lo guarda en el redis
         """
         try:
             encoded = jwt.encode(data, secret_key, algorithm='HS256')
-            data['jwt'] = encoded
-            redis.setex(f'jwt-{user_id}', lifetime_jwt, json.dumps(data))
+            data['user_id'] = user_id
+            redis.setex(f'jwt-{encoded}', lifetime_jwt, json.dumps(data))
             return encoded
         except Exception:
             return None
 
-    def eliminar_token(self, redis: 'Redis', user_id: int):
+    def eliminar_token(self, redis: 'Redis', jwt_token: str):
         """
-        a
+        Elimina el token del redis
         """
         try:
-            return redis.delete(f'jwt-{user_id}')
+            return redis.delete(f'jwt-{jwt_token}')
         except Exception:
             return None
 
-    def validar_token(self, redis, user_id):
+    def validar_token(self, redis, jwt_token):
         """
-        a
+        revisa si existe el jwt en el redis
         """
-        return redis.exists(f'jwt-{user_id}')
+        return redis.exists(f'jwt-{jwt_token}')
 
     def generate_hash(self, password: str, salt: Optional[str] = None):
         """
-        a
+        genera el hash de seguridad con m5 y sha 256
         """
         salt = salt or str(uuid.uuid1())
         hash_final = hashlib.sha256(
@@ -70,6 +70,6 @@ class Sesion():
 
     def decode_jwt(self, jwt_token: str, secret_key: str):
         """
-        a
+        Decodifica el jwt para ver la información
         """
         return jwt.decode(jwt_token, secret_key, algorithms=['HS256', ])

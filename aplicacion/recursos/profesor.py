@@ -3,14 +3,17 @@ profesor Module
 """
 from flask_restful import Resource
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.profesor import ProfesorModel
+from aplicacion.redis import redis_client
 
 
 class Profesor(Resource):
     """
     Recurso profesor
     """
-
+    @authentication(redis_client, Sesion())
     def get(self, rut):
         """
         Obtener profesor
@@ -20,6 +23,7 @@ class Profesor(Resource):
             return profesor.obtener_datos()
         return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
 
+    @authentication(redis_client, Sesion())
     def delete(self, rut):
         """
         Eliminar profesor

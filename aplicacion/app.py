@@ -19,6 +19,7 @@ from aplicacion.recursos.cursos_profesor import CursosProfesor
 from aplicacion.recursos.profesor import Profesor
 from aplicacion.recursos.profesores import Profesores
 from aplicacion.recursos.usuario import Usuario
+from aplicacion.recursos.usuarios import Usuarios
 
 # IMPORTACIÓN DE RECURSOS
 app = Flask(__name__)
@@ -53,6 +54,7 @@ api.add_resource(Curso, '/curso/<string:nombre>')
 api.add_resource(Cursos, '/cursos')
 api.add_resource(AlumnosCurso, '/curso/<string:nombre>/alumnos')
 api.add_resource(Auth, '/auth')
-api.add_resource(Usuario, '/user')
+api.add_resource(Usuarios, '/user')
+api.add_resource(Usuario, '/user/<int:_id>')
 
 app.run(host='0.0.0.0', port=5000)

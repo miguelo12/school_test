@@ -25,7 +25,7 @@ class DevelopmentConfig(Config):
     CACHE_REDIS_PORT = secrets_dev.CACHE_REDIS_PORT
     CACHE_REDIS_DB = secrets_dev.CACHE_REDIS_DB
     JWT_SECRET_KEY = secrets_dev.JWT_SECRET_KEY
-    JWT_LIFETIME_DAYS = secrets_dev.JWT_LIFETIME_DAYS
+    JWT_LIFETIME_HOURS = secrets_dev.JWT_LIFETIME_HOURS
 
 
 class TestingConfig(Config):

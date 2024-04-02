@@ -4,8 +4,11 @@ curso Module
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.curso import CursoModel
 from aplicacion.modelos.profesor import ProfesorModel
+from aplicacion.redis import redis_client
 
 
 class Cursos(Resource):
@@ -38,12 +41,14 @@ class Cursos(Resource):
         required=False
     )
 
+    @authentication(redis_client, Sesion())
     def get(self):
         """
         Obtener cursos
         """
         return {'cursos': list(map(lambda x: x.obtener_datos(), CursoModel.query.all()))}
 
+    @authentication(redis_client, Sesion())
     def post(self):
         """
         Guardar curso

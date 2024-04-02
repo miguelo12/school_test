@@ -3,13 +3,17 @@ profesores Module
 """
 from flask_restful import Resource
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.profesor import ProfesorModel
+from aplicacion.redis import redis_client
 
 
 class CursosProfesor(Resource):
     """
     Recurso curso profesor
     """
+    @authentication(redis_client, Sesion())
     def get(self, rut):
         """
         obtener los cursos del profesor

@@ -3,7 +3,10 @@ Alumno Module
 """
 from flask_restful import Resource
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.alumno import AlumnoModel
+from aplicacion.redis import redis_client
 
 
 class Alumno(Resource):
@@ -11,6 +14,7 @@ class Alumno(Resource):
     Recursos alumno
     """
 
+    @authentication(redis_client, Sesion())
     def get(self, rut):
         """
         Obtener alumno
@@ -22,6 +26,7 @@ class Alumno(Resource):
 
         return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
 
+    @authentication(redis_client, Sesion())
     def delete(self, rut):
         """
         Eliminar alumno

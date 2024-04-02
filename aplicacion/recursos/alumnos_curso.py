@@ -4,8 +4,11 @@ alumnos curso Module
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.alumno import AlumnoModel
 from aplicacion.modelos.curso import CursoModel
+from aplicacion.redis import redis_client
 
 
 class AlumnosCurso(Resource):
@@ -20,6 +23,7 @@ class AlumnosCurso(Resource):
         help='Debe ingresar el alumno que va ingresar al curso'
     )
 
+    @authentication(redis_client, Sesion())
     def get(self, nombre):
         """
         Obtiene los alumnos de un curso
@@ -29,6 +33,7 @@ class AlumnosCurso(Resource):
             return curso.obtener_alumnos()
         return ({'mensaje': 'No se encontró el curso solicitado'}, 404)
 
+    @authentication(redis_client, Sesion())
     def post(self, nombre):
         """
         Obtiene los alumnos de un curso

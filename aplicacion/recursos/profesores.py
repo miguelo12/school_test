@@ -4,7 +4,10 @@ profesores Module
 from flask_restful import Resource
 from flask_restful import reqparse
 
+from aplicacion.helpers.sesion import Sesion
+from aplicacion.middleware.authentication import authentication
 from aplicacion.modelos.profesor import ProfesorModel
+from aplicacion.redis import redis_client
 
 
 class Profesores(Resource):
@@ -36,12 +39,14 @@ class Profesores(Resource):
         required=False
     )
 
+    @authentication(redis_client, Sesion())
     def get(self):
         """
         Obtener profesores
         """
         return ({'Profesores': list(map(lambda x: x.obtener_datos(), ProfesorModel.query.all()))})
 
+    @authentication(redis_client, Sesion())
     def post(self):
         """
         Agregar profesor
@@ -68,6 +73,7 @@ class Profesores(Resource):
             return ({'message': 'No se pudo resolver su petición.'}, 500)
         return (profesor.obtener_datos(), 201)
 
+    @authentication(redis_client, Sesion())
     def put(self):
         """
         Actualizar profesor
