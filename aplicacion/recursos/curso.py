@@ -1,0 +1,90 @@
+"""
+curso Module
+"""
+from flask_restful import Resource
+from flask_restful import reqparse
+
+from aplicacion.modelos.curso import CursoModel
+from aplicacion.modelos.profesor import ProfesorModel
+
+
+class Curso(Resource):
+    """
+    El recurso de curso
+    """
+    parser = reqparse.RequestParser()
+    parser.add_argument(
+        'nombre',
+        type=str,
+        required=True,
+        help='Debe ingresar un nombre para el curso'
+    )
+    parser.add_argument(
+        'rut_profesor',
+        type=str,
+        required=True,
+        help='Debe ingresar el rut del profesor que dictará el curso.'
+    )
+    parser.add_argument(
+        'nivel',
+        type=int,
+        required=True,
+        choices=(1, 2, 3, 4),
+        help='Debe ingresar el nivel (entero del 1 al 4).'
+    )
+    parser.add_argument(
+        'activo',
+        type=bool,
+        required=False
+    )
+
+    def get(self, _id):
+        """
+        Obtener curso
+        """
+        curso = CursoModel.buscar_por_id(_id)
+        if curso:
+            return curso.obtener_datos()
+        return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
+
+    def delete(self, _id):
+        """
+        Elimina el curso
+        """
+        curso = CursoModel.buscar_por_id(_id)
+        if not curso:
+            return ({'mensaje': 'No se encontró el recurso solicitado'}, 404)
+
+        try:
+            curso.eliminar()
+            return {'message': 'Curso eliminado con éxito'}
+        except Exception:
+            return ({'message': 'No se pudo realizar la eliminación'}, 500)
+
+    def put(self, _id):
+        """
+        Actualizar curso
+        """
+        data = self.parser.parse_args()
+        curso_model = CursoModel.buscar_por_id(_id)
+
+        if not curso_model:
+            return ({'message': 'No se encontró el curso'}, 404)
+
+        if not ProfesorModel.buscar_por_rut(data['rut_profesor']):
+            return ({'message': 'El identificador del profesor ingresado no es válido'}, 400)
+
+        curso_model.nombre = data['nombre']
+        curso_model.id_profesor = data['id_profesor']
+        curso_model.nivel = data['nivel']
+
+        activo = data['activo']
+        if activo is not None:
+            curso_model.activo = activo
+
+        try:
+            curso_model.guardar()
+        except Exception:
+            return ({'message': 'No se pudo resolver su petición.'}, 500)
+
+        return (curso_model.obtener_datos(), 201)

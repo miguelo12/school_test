@@ -1,0 +1,17 @@
+Flask==3.0.2
+werkzeug==3.0.1
+Flask-Sqlalchemy==3.1.1
+flask_restful
+pymysql
+flask_cors
+openpyxl
+python-dateutil
+requests==2.29.0
+requests_oauthlib
+PyJWT==2.8.0
+SQLAlchemy==2.0.29
+flask-sqlacodegen
+flasgger==0.9.5
+alembic
+flask-caching
+redis

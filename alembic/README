@@ -1,0 +1,7 @@
+Generic single-database configuration.
+
+# Generar una version nueva automatica
+alembic revision --autogenerate -m "Initial migration"
+
+# Actualizar la base de datos
+alembic upgrade head
