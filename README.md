@@ -10,7 +10,6 @@ flask | docker | redis | mysql
 
 ## Server/docker
 - docker-compose up
-- docker-compose up --build
 
 Add secrets.py into 'aplicacion' folder
 
