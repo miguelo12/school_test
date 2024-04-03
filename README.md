@@ -5,6 +5,7 @@ flask | docker | redis | mysql
 ## Alembic
 - python3 -m venv aplicacion/.env
 - source aplicacion/.env/bin/activate
+- pip install wheel
 - pip install -r aplicacion/requirements.txt
 - alembic upgrade head
 
