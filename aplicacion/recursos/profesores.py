@@ -43,6 +43,19 @@ class Profesores(Resource):
     def get(self):
         """
         Obtener profesores
+        ---
+        tags:
+          - profesores
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         return ({'Profesores': list(map(lambda x: x.obtener_datos(), ProfesorModel.query.all()))})
 
@@ -50,6 +63,40 @@ class Profesores(Resource):
     def post(self):
         """
         Agregar profesor
+        ---
+        tags:
+          - profesores
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: profesores
+            in: body
+            schema:
+                type: object
+                required:
+                - nombres
+                - apellidos
+                - rut
+                - activo
+                properties:
+                    nombres:
+                        type: string
+                        maxLength: 100
+                    apellidos:
+                        type: string
+                        maxLength: 100
+                    rut:
+                        type: string
+                        maxLength: 15
+                    activo:
+                        type: boolean
+        responses:
+            201:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         data = Profesores.parser.parse_args()
         if ProfesorModel.buscar_existencia(data['rut']):
@@ -77,6 +124,40 @@ class Profesores(Resource):
     def put(self):
         """
         Actualizar profesor
+        ---
+        tags:
+          - profesores
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: profesores
+            in: body
+            schema:
+                type: object
+                required:
+                - nombres
+                - apellidos
+                - rut
+                - activo
+                properties:
+                    nombres:
+                        type: string
+                        maxLength: 100
+                    apellidos:
+                        type: string
+                        maxLength: 100
+                    rut:
+                        type: string
+                        maxLength: 15
+                    activo:
+                        type: boolean
+        responses:
+            201:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         data = Profesores.parser.parse_args()
         profesor = ProfesorModel.buscar_existencia(data['rut'])

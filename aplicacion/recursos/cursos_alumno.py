@@ -17,6 +17,23 @@ class CursosAlumno(Resource):
     def get(self, rut):
         """
         Obtiene los cursos del alumno
+        ---
+        tags:
+          - cursos_alumno
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: rut
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         alumno = AlumnoModel.buscar_por_rut(rut)
 

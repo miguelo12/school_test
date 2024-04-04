@@ -27,6 +27,24 @@ class AlumnosCurso(Resource):
     def get(self, nombre):
         """
         Obtiene los alumnos de un curso
+        ---
+        tags:
+          - alumnos_curso
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: nombre
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {
+                    }
         """
         curso = CursoModel.buscar_por_nombre(nombre)
         if curso:
@@ -36,7 +54,24 @@ class AlumnosCurso(Resource):
     @authentication(redis_client, Sesion())
     def post(self, nombre):
         """
-        Obtiene los alumnos de un curso
+        Agregar alumnos al curso
+        ---
+        tags:
+          - alumnos_curso
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: nombre
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {"message": "Guardado con exito"}
         """
         data = self.parser_post.parse_args()
         rut_alumno = data['rut_alumno']

@@ -18,6 +18,31 @@ class Alumno(Resource):
     def get(self, rut):
         """
         Obtener alumno
+        ---
+        tags:
+          - alumno
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: rut
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {
+                        'alumno': {
+                            'id': 1,
+                            'nombres': 'jose juan',
+                            'apellidos': 'vicuña muñoz',
+                            'fecha_inscripcion': '12-10-19',
+                            'activo': true
+                        }
+                    }
         """
         alumno = AlumnoModel.buscar_por_rut(rut)
 
@@ -30,6 +55,31 @@ class Alumno(Resource):
     def delete(self, rut):
         """
         Eliminar alumno
+        ---
+        tags:
+          - alumno
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: rut
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {
+                        'alumno': {
+                            'id': 1,
+                            'nombres': 'jose juan',
+                            'apellidos': 'vicuña muñoz',
+                            'fecha_inscripcion': '12-10-19',
+                            'activo': true
+                        }
+                    }
         """
         alumno = AlumnoModel.buscar_por_rut(rut)
 

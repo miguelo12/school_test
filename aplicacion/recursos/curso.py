@@ -45,6 +45,23 @@ class Curso(Resource):
     def get(self, nombre):
         """
         Obtener curso
+        ---
+        tags:
+          - curso
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: nombre
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         curso = CursoModel.buscar_por_nombre(nombre)
         if curso:
@@ -55,6 +72,23 @@ class Curso(Resource):
     def delete(self, nombre):
         """
         Elimina el curso
+        ---
+        tags:
+          - curso
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: nombre
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {"message": "Curso eliminado con éxito"}
         """
         curso = CursoModel.buscar_por_nombre(nombre)
         if not curso:
@@ -70,6 +104,44 @@ class Curso(Resource):
     def put(self, nombre):
         """
         Actualizar curso
+        ---
+        tags:
+          - curso
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: nombre
+            in: path
+            type: string
+            required: true
+          - name: curso
+            in: body
+            schema:
+                type: object
+                required:
+                - nombre
+                - rut_profesor
+                - nivel
+                - activo
+                properties:
+                    nombre:
+                        type: string
+                        maxLength: 100
+                    rut_profesor:
+                        type: string
+                        maxLength: 15
+                    nivel:
+                        type: integer
+                        maxLength: 1
+                    activo:
+                        type: boolean
+        responses:
+            201:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         data = self.parser.parse_args()
         curso_model = CursoModel.buscar_por_nombre(nombre)
