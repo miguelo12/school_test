@@ -54,7 +54,7 @@ class AlumnosCurso(Resource):
     @authentication(redis_client, Sesion())
     def post(self, nombre):
         """
-        Obtiene los alumnos de un curso
+        Agregar alumnos al curso
         ---
         tags:
           - alumnos_curso
