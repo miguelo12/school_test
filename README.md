@@ -12,7 +12,7 @@ flask | docker | redis | mysql
 ## Server/docker
 - docker-compose up
 
-Add secrets.py into 'aplicacion' folder
+Add secrets.py to the 'aplicacion' folder
 
 Localhost:5000 by default
 
