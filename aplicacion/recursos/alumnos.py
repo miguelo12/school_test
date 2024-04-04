@@ -48,6 +48,11 @@ class Alumnos(Resource):
         ---
         tags:
           - alumnos
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
         responses:
             200:
                 description: Respuesta exitosa.
@@ -64,6 +69,10 @@ class Alumnos(Resource):
         tags:
           - alumnos
         parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
           - name: alumnos
             in: body
             schema:
@@ -121,11 +130,15 @@ class Alumnos(Resource):
     @authentication(redis_client, Sesion())
     def put(self):
         """
-        Guardar alumno
+        Actualizar alumno
         ---
         tags:
           - alumnos
         parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
           - name: alumnos
             in: body
             schema:
@@ -148,7 +161,15 @@ class Alumnos(Resource):
             200:
                 description: Respuesta exitosa.
                 examples:
-                    application/json: {'alumnos': []}
+                    application/json: {
+                        'alumno': {
+                            'id': 1,
+                            'nombres': 'jose juan',
+                            'apellidos': 'vicuña muñoz',
+                            'fecha_inscripcion': '12-10-19',
+                            'activo': true
+                        }
+                    }
         """
         data = Alumnos.parser.parse_args()
         alumno_nombres = data['nombres']

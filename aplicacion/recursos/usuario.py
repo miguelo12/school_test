@@ -21,6 +21,15 @@ class Usuario(Resource):
         ---
         tags:
           - user
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: _id
+            in: path
+            type: string
+            required: true
         responses:
             200:
                 description: Respuesta exitosa.

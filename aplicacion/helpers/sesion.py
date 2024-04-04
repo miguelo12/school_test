@@ -9,7 +9,10 @@ from typing import TYPE_CHECKING
 from typing import Dict
 from typing import Optional
 
-import jwt
+from jwt import decode as jwt_decode
+from jwt import encode as jwt_encode
+from jwt.exceptions import DecodeError
+from jwt.exceptions import ExpiredSignatureError
 
 if TYPE_CHECKING:
     from redis import Redis
@@ -34,7 +37,7 @@ class Sesion():
         Genera el token de acceso y lo guarda en el redis
         """
         try:
-            encoded = jwt.encode(data, secret_key, algorithm='HS256')
+            encoded = jwt_encode(data, secret_key, algorithm='HS256')
             data['user_id'] = user_id
             redis.setex(f'jwt-{encoded}', lifetime_jwt, json.dumps(data))
             return encoded
@@ -71,5 +74,13 @@ class Sesion():
     def decode_jwt(self, jwt_token: str, secret_key: str):
         """
         Decodifica el jwt para ver la información
+
+        Return
+        ------
+        dict or None
+            Si da error es porque expiro o es invalido y devuelve None
         """
-        return jwt.decode(jwt_token, secret_key, algorithms=['HS256', ])
+        try:
+            return jwt_decode(jwt_token, secret_key, algorithms=['HS256', ])
+        except (ExpiredSignatureError, DecodeError):
+            return None

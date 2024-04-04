@@ -17,6 +17,23 @@ class CursosProfesor(Resource):
     def get(self, rut):
         """
         obtener los cursos del profesor
+        ---
+        tags:
+          - cursos_profesor
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: rut
+            in: path
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         profesor = ProfesorModel.buscar_por_rut(rut)
 

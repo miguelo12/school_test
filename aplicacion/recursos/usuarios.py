@@ -65,6 +65,11 @@ class Usuarios(Resource):
         ---
         tags:
           - users
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
         responses:
             200:
                 description: Respuesta exitosa.
@@ -80,18 +85,26 @@ class Usuarios(Resource):
         tags:
           - users
         parameters:
-          - name: username
-            in: usuario
+          - name: Authorization
+            in: header
             type: string
             required: true
-          - name: password
-            in: usuario
-            type: string
-            required: true
-          - name: activo
-            in: usuario
-            type: boolean
-            required: true
+          - name: user
+            in: body
+            schema:
+                type: object
+                required:
+                - username
+                - password
+                properties:
+                    username:
+                        type: string
+                        maxLength: 100
+                    password:
+                        type: string
+                        maxLength: 100
+                    activo:
+                        type: boolean
         responses:
             200:
                 description: Respuesta exitosa.
@@ -122,18 +135,26 @@ class Usuarios(Resource):
         tags:
           - users
         parameters:
-          - name: username
-            in: usuario
+          - name: Authorization
+            in: header
             type: string
             required: true
-          - name: password
-            in: usuario
-            type: string
-            required: true
-          - name: activo
-            in: usuario
-            type: boolean
-            required: true
+          - name: user
+            in: body
+            schema:
+                type: object
+                required:
+                - username
+                - password
+                properties:
+                    username:
+                        type: string
+                        maxLength: 100
+                    password:
+                        type: string
+                        maxLength: 100
+                    activo:
+                        type: boolean
         responses:
             200:
                 description: Respuesta exitosa.
@@ -182,10 +203,20 @@ class Usuarios(Resource):
         tags:
           - users
         parameters:
-          - name: username
-            in: usuario
+          - name: Authorization
+            in: header
             type: string
             required: true
+          - name: alumnos
+            in: body
+            schema:
+                type: object
+                required:
+                - username
+                properties:
+                    username:
+                        type: string
+                        maxLength: 100
         responses:
             200:
                 description: Respuesta exitosa.

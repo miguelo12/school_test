@@ -40,19 +40,25 @@ class Auth(Resource):
         tags:
           - auth
         parameters:
-          - name: username
+          - name: auth
             in: body
-            type: string
-            required: true
-          - name: password
-            in: body
-            type: string
-            required: true
+            schema:
+                type: object
+                required:
+                - username
+                - password
+                properties:
+                    username:
+                        type: string
+                        maxLength: 100
+                    password:
+                        type: string
+                        maxLength: 100
         responses:
             200:
                 description: Respuesta exitosa.
                 examples:
-                    application/json: {'message': 'Se cerro la sesion'}
+                    application/json: {'message': 'Inicio de session exitosa.'}
         """
         session = Sesion()
         data = self.parser.parse_args()
@@ -112,15 +118,7 @@ class Auth(Resource):
         data = self.parser_delete.parse_args()
         jwt_token = data['Authorization']
 
-        jwt_secret_key = current_app.config['JWT_SECRET_KEY']
-        decode_jwt = sesion.decode_jwt(jwt_token, jwt_secret_key)
-        username = decode_jwt.get('usuario')
-
-        user_model = UsuarioModel.buscar_username(username)
-        if not user_model:
-            return ({'mensaje': 'No existe este usuario, para cerrar la sesion'}, 404)
-
         if sesion.eliminar_token(redis, jwt_token):
             return {'message': 'Se cerro la sesion'}
 
-        return ({'message': 'No se pudo cerrar sesion'}, 500)
+        return ({'message': 'Jwt invalido'}, 500)

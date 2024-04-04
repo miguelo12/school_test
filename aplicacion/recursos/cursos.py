@@ -45,6 +45,19 @@ class Cursos(Resource):
     def get(self):
         """
         Obtener cursos
+        ---
+        tags:
+          - cursos
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+        responses:
+            200:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         return {'cursos': list(map(lambda x: x.obtener_datos(), CursoModel.query.all()))}
 
@@ -52,6 +65,40 @@ class Cursos(Resource):
     def post(self):
         """
         Guardar curso
+        ---
+        tags:
+          - cursos
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+          - name: cursos
+            in: body
+            schema:
+                type: object
+                required:
+                - nombre
+                - rut_profesor
+                - nivel
+                - activo
+                properties:
+                    nombre:
+                        type: string
+                        maxLength: 100
+                    rut_profesor:
+                        type: string
+                        maxLength: 15
+                    nivel:
+                        type: integer
+                        maxLength: 1
+                    activo:
+                        type: boolean
+        responses:
+            201:
+                description: Respuesta exitosa.
+                examples:
+                    application/json: {}
         """
         data = Cursos.parser.parse_args()
         rut_profesor = data['rut_profesor']
