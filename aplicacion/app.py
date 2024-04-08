@@ -4,6 +4,7 @@ App flask
 from flasgger import Swagger
 from flask import Flask
 from flask_caching import Cache
+from flask_cors import CORS
 from flask_restful import Api
 
 from aplicacion.config import app_config
@@ -29,6 +30,9 @@ ENVIROMENT = "development"  # sys.argv[1]
 
 # Se setean variables de configuracion segun ambiente(env)
 app.config.from_object(app_config[ENVIROMENT])
+
+# cors
+CORS(app)
 
 # Initialize Flask-Caching with Redis and DB
 cache = Cache(app=app)
