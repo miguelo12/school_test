@@ -4,6 +4,7 @@ Flask-Sqlalchemy==3.1.1
 flask_restful
 pymysql
 flask_cors
+types-Flask-Cors
 openpyxl
 python-dateutil
 requests==2.29.0
