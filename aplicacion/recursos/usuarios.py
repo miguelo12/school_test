@@ -85,10 +85,6 @@ class Usuarios(Resource):
         tags:
           - users
         parameters:
-          - name: Authorization
-            in: header
-            type: string
-            required: true
           - name: user
             in: body
             schema:
