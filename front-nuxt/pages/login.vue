@@ -9,7 +9,7 @@
 
   async function logIn() {
     loading.value = true
-    await authStore.logIn(userName.value, password.value)
+    message.value = await authStore.logIn(userName.value, password.value)
     loading.value = false
 
     if (authStore.is_authenticated) {
@@ -52,7 +52,7 @@
               }
             ]"
           ></v-text-field>
-                
+          <v-alert v-if="message" v-text="message"></v-alert>
           <v-btn
             :loading="loading"
             class="mt-2"
