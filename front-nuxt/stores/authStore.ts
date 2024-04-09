@@ -1,4 +1,4 @@
-import { fetchLogIn, fetchLogOut } from "~/services/authService"
+import { fetchCreateUser, fetchLogIn, fetchLogOut } from "~/services/authService"
 import { useStorage } from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', {
@@ -7,6 +7,12 @@ export const useAuthStore = defineStore('auth', {
         username: useStorage('username', '')
     }),
     actions: {
+        async createUser(username: string, password: string) {
+            const { _, message } = await fetchCreateUser(username, password).catch(
+                (err) => err.data
+            )
+            return message
+        },
         async logIn(username: string, password: string) {
             const { data, message } = await fetchLogIn(username, password).catch(
                 (err) => err.data
