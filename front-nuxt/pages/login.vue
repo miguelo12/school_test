@@ -1,71 +1,75 @@
 <script setup>
-  const authStore = useAuthStore()
-  
-  // Form data
-  const modeCreate = ref(false)
-  const userName = ref('')
-  const password = ref('')
-  const rePassword = ref('')
-  const show_pass = ref(false)
+const authStore = useAuthStore()
 
-  // form extra
-  const is_error = ref(false)
-  const loading = ref(false)
-  const message = ref('')
+// Form data
+const modeCreate = ref(false)
+const userName = ref('')
+const password = ref('')
+const rePassword = ref('')
+const show_pass = ref(false)
 
-  async function logIn(event) {
-    loading.value = true
-    const results = await event
+// form extra
+const is_error = ref(false)
+const loading = ref(false)
+const message = ref('')
 
-    // Verifica que el form sea valido
-    if (!results.valid) {
-      message.value = ''
-      loading.value = false
-      return
-    }
+async function logIn(event) {
+  loading.value = true
+  const results = await event
 
-    const messageLogIn = await authStore.logIn(userName.value, password.value)
+  // Verifica que el form sea valido
+  if (!results.valid) {
+    message.value = ''
     loading.value = false
-
-    if (!authStore.is_authenticated) {
-      message.value = messageLogIn
-      is_error.value = true
-    }
+    return
   }
 
-  async function userCreate(event) {
-    loading.value = true
-    const results = await event
+  const messageLogIn = await authStore.logIn(userName.value, password.value)
+  loading.value = false
 
-    // Verifica que el form sea valido
-    if (!results.valid) {
-      message.value = ''
-      loading.value = false
-      return
-    }
+  if (!authStore.is_authenticated) {
+    message.value = messageLogIn
+    is_error.value = true
+  }
+}
 
-    const dataUser = await authStore.createUser(userName.value, password.value)
-    message.value = dataUser.message
-    is_error.value = dataUser.is_failed
+async function userCreate(event) {
+  loading.value = true
+  const results = await event
+
+  // Verifica que el form sea valido
+  if (!results.valid) {
+    message.value = ''
     loading.value = false
-
-    changeMode(false)
+    return
   }
 
-  function changeMode(removeMessage = true) {
-    userName.value = ''
-    password.value = ''
-    rePassword.value = ''
-    if (removeMessage) message.value = ''
-    modeCreate.value = !modeCreate.value
-  }
+  const dataUser = await authStore.createUser(userName.value, password.value)
+  message.value = dataUser.message
+  is_error.value = dataUser.is_failed
+  loading.value = false
 
-  //Redirigir para no ver el login
-  if (process.client){
-    if (authStore.is_authenticated) {
-      navigateTo('/')
-    }
+  changeMode(false)
+}
+
+function changeMode(removeMessage = true) {
+  userName.value = ''
+  password.value = ''
+  rePassword.value = ''
+  if (removeMessage) message.value = ''
+  modeCreate.value = !modeCreate.value
+}
+
+definePageMeta({
+  layout: 'without-header',
+})
+
+// Redirigir para no ver el login
+if (import.meta.client) {
+  if (authStore.is_authenticated) {
+    navigateTo('/')
   }
+}
 </script>
 
 <template>
@@ -76,63 +80,84 @@
         min-width="500"
         rounded="lg"
       >
-        <v-form v-if="!modeCreate" validate-on="submit lazy" @submit.prevent="logIn">
+        <v-form
+          v-if="!modeCreate"
+          validate-on="submit lazy"
+          @submit.prevent="logIn"
+        >
           <v-text-field
             v-model="userName"
             label="Username"
             :rules="[
-              value => {
-                if (value) return true
-                return 'El Username no debe estar vació.'
-              }
+              (value) => {
+                if (value) return true;
+                return 'El Username no debe estar vació.';
+              },
             ]"
             required
-          ></v-text-field>
+          />
           <v-text-field
             v-model="password"
             label="Password"
             :type="show_pass ? 'text' : 'password'"
             :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
-              value => {
-                if (value) return true
-                return 'El Password no debe estar vació.'
-              }
+              (value) => {
+                if (value) return true;
+                return 'El Password no debe estar vació.';
+              },
             ]"
-            @click:append-inner="show_pass = !show_pass"
             required
-          ></v-text-field>
+            @click:append-inner="show_pass = !show_pass"
+          />
           <v-alert
             v-if="message"
             class="mt-4 mb-4"
             :type="is_error ? 'warning' : 'success'"
-            v-text="message"
-          />
+          >
+            {{ message }}
+          </v-alert>
           <v-btn
             :loading="loading"
             class="mt-2"
             text="Iniciar sesión"
             type="submit"
+            color="purple-darken-3"
+            size="x-large"
             block
           />
-          <v-divider class="mt-8 mb-8 border-opacity-25"/>
+          <v-divider
+            :thickness="2"
+            color="purple-darken-4"
+            class="mt-8 mb-8 border-opacity-50"
+          />
           <v-btn
             :loading="loading"
             variant="plain"
             class="mt-2"
-            @click="changeMode()"
             block
-          >Crear un usuario <v-icon icon="mdi-chevron-right"/></v-btn>
+            @click="changeMode()"
+          >
+            Crear un usuario
+            <v-icon
+              color="purple-darken-4"
+              icon="mdi-chevron-right"
+            />
+          </v-btn>
         </v-form>
-        <v-form v-else validate-on="submit lazy" @submit.prevent="userCreate">
+        <v-form
+          v-else
+          validate-on="submit lazy"
+          @submit.prevent="userCreate"
+        >
           <v-text-field
             v-model="userName"
             label="Username"
             :rules="[
-              value => {
-                if (value) return true
-                return 'El Username no debe estar vació.'
-              }
+              (value) => {
+                if (value) return true;
+                return 'El Username no debe estar vació.';
+              },
             ]"
             required
           />
@@ -142,13 +167,13 @@
             :type="show_pass ? 'text' : 'password'"
             :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
-                value => {
-                  if (value) return true
-                  return 'El Password no debe estar vació.'
-                }
-              ]"
-            @click:append-inner="show_pass = !show_pass"
+              (value) => {
+                if (value) return true;
+                return 'El Password no debe estar vació.';
+              },
+            ]"
             required
+            @click:append-inner="show_pass = !show_pass"
           />
           <v-text-field
             v-model="rePassword"
@@ -156,37 +181,51 @@
             :type="show_pass ? 'text' : 'password'"
             :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
-              value => {
-                if (value !== password) return 'El password y el Re-Password no es el mismo.' 
-                if (value) return true
-                return 'El Re-Password no debe estar vació.'
-              }
+              (value) => {
+                if (value !== password)
+                  return 'El password y el Re-Password no es el mismo.';
+                if (value) return true;
+                return 'El Re-Password no debe estar vació.';
+              },
             ]"
-            @click:append-inner="show_pass = !show_pass"
             required
+            @click:append-inner="show_pass = !show_pass"
           />
           <v-alert
             v-if="message"
             class="mt-4 mb-4"
             :type="is_error ? 'warning' : 'success'"
-            v-text="message"
-          />
+          >
+            {{ message }}
+          </v-alert>
           <v-btn
-          :loading="loading"
-          class="mt-2"
-          text="Crear usuario"
-          type="submit"
-          block
+            :loading="loading"
+            class="mt-2"
+            text="Crear usuario"
+            type="submit"
+            size="x-large"
+            color="purple-darken-3"
+            block
           />
-          <v-divider class="mt-8 mb-8 border-opacity-25"/>
+          <v-divider
+            :thickness="2"
+            color="purple-darken-4"
+            class="mt-8 mb-8 border-opacity-50"
+          />
           <v-btn
             :loading="loading"
             variant="plain"
             text="Ir a iniciar sesión"
             class="mt-2"
-            @click="changeMode()"
             block
-          >Ir a iniciar sesión <v-icon icon="mdi-chevron-right"/></v-btn>
+            @click="changeMode()"
+          >
+            Ir a iniciar sesión
+            <v-icon
+              color="purple-darken-4"
+              icon="mdi-chevron-right"
+            />
+          </v-btn>
         </v-form>
       </v-sheet>
     </v-col>

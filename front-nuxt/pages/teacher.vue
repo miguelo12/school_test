@@ -1,5 +1,5 @@
 <template>
-    <div>
-        SOY UN PROFESOR
-    </div>
+  <div>
+    SOY UN PROFESOR
+  </div>
 </template>

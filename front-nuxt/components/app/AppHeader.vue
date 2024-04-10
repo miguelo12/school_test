@@ -3,8 +3,18 @@ const authStore = useAuthStore()
 </script>
 
 <template>
-    <v-app-bar scroll-behavior="elevate" color="purple-darken-4">
-        <v-app-bar-title>School</v-app-bar-title>
-        <v-btn v-if="authStore.is_authenticated" @click="authStore.logOut()" icon="mdi-logout"></v-btn>
-    </v-app-bar>
+  <v-app-bar
+    scroll-behavior="elevate"
+    color="purple-darken-3"
+  >
+    <v-app-bar-title>School</v-app-bar-title>
+    <div v-if="authStore.is_authenticated">
+      {{ authStore.username }}
+    </div>
+    <v-btn
+      v-if="authStore.is_authenticated"
+      icon="mdi-logout"
+      @click="authStore.logOut()"
+    />
+  </v-app-bar>
 </template>

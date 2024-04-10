@@ -1,4 +1,4 @@
 interface BaseAPI<Type> {
-    data: Type,
-    message: string
+  data: Type
+  message: string
 }

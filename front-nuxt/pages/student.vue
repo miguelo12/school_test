@@ -1,5 +1,19 @@
+<script setup>
+const breadcrumbItems = [
+  {
+    title: 'Index',
+    disabled: false,
+    to: '/',
+  },
+  {
+    title: 'Alumno',
+    disabled: true,
+  },
+]
+</script>
+
 <template>
-    <div>
-        SOY UN ESTUDIANTE
-    </div>
+  <v-container>
+    <v-breadcrumbs :items="breadcrumbItems" />
+  </v-container>
 </template>
