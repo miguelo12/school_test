@@ -34,9 +34,6 @@ export default defineNuxtConfig({
     },
   },
   eslint: {
-    config: {
-      standalone: false,
-    },
   },
   app: {
     head: {
