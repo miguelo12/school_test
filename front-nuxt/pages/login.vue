@@ -1,11 +1,14 @@
 <script setup>
   const authStore = useAuthStore()
-
+  
+  // Form data
   const modeCreate = ref(false)
   const userName = ref('')
   const password = ref('')
   const rePassword = ref('')
+  const show_pass = ref(false)
 
+  // form extra
   const is_error = ref(false)
   const loading = ref(false)
   const message = ref('')
@@ -21,13 +24,11 @@
       return
     }
 
-    message.value = await authStore.logIn(userName.value, password.value)
+    const messageLogIn = await authStore.logIn(userName.value, password.value)
     loading.value = false
 
-    if (authStore.is_authenticated) {
-      is_error.value = false
-      navigateTo('/')
-    } else {
+    if (!authStore.is_authenticated) {
+      message.value = messageLogIn
       is_error.value = true
     }
   }
@@ -43,32 +44,28 @@
       return
     }
 
-    message.value = await authStore.createUser(userName.value, password.value)
+    const dataUser = await authStore.createUser(userName.value, password.value)
+    message.value = dataUser.message
+    is_error.value = dataUser.is_failed
     loading.value = false
 
-    if (authStore.is_authenticated) {
-      is_error.value = false
-      navigateTo('/')
-    } else {
-      is_error.value = true
-    }
+    changeMode(false)
   }
 
-  function changeMode() {
+  function changeMode(removeMessage = true) {
     userName.value = ''
     password.value = ''
     rePassword.value = ''
-    message.value = ''
+    if (removeMessage) message.value = ''
     modeCreate.value = !modeCreate.value
   }
 
   //Redirigir para no ver el login
-  // if (process.client){
-  //   let token = localStorage.getItem('token')
-  //   if (token !== null) {
-  //     navigateTo('/')
-  //   }
-  // }
+  if (process.client){
+    if (authStore.is_authenticated) {
+      navigateTo('/')
+    }
+  }
 </script>
 
 <template>
@@ -94,18 +91,21 @@
           <v-text-field
             v-model="password"
             label="Password"
+            :type="show_pass ? 'text' : 'password'"
+            :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
               value => {
                 if (value) return true
                 return 'El Password no debe estar vació.'
               }
             ]"
+            @click:append-inner="show_pass = !show_pass"
             required
           ></v-text-field>
           <v-alert
             v-if="message"
             class="mt-4 mb-4"
-            :type="!authStore.is_authenticated ? 'warning' : 'success'"
+            :type="is_error ? 'warning' : 'success'"
             v-text="message"
           />
           <v-btn
@@ -119,11 +119,10 @@
           <v-btn
             :loading="loading"
             variant="plain"
-            text="Crear un usuario"
             class="mt-2"
             @click="changeMode()"
             block
-          />
+          >Crear un usuario <v-icon icon="mdi-chevron-right"/></v-btn>
         </v-form>
         <v-form v-else validate-on="submit lazy" @submit.prevent="userCreate">
           <v-text-field
@@ -140,17 +139,22 @@
           <v-text-field
             v-model="password"
             label="Password"
+            :type="show_pass ? 'text' : 'password'"
+            :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
                 value => {
                   if (value) return true
                   return 'El Password no debe estar vació.'
                 }
               ]"
+            @click:append-inner="show_pass = !show_pass"
             required
           />
           <v-text-field
             v-model="rePassword"
             label="Re-Password"
+            :type="show_pass ? 'text' : 'password'"
+            :append-inner-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[
               value => {
                 if (value !== password) return 'El password y el Re-Password no es el mismo.' 
@@ -158,12 +162,13 @@
                 return 'El Re-Password no debe estar vació.'
               }
             ]"
+            @click:append-inner="show_pass = !show_pass"
             required
           />
           <v-alert
             v-if="message"
             class="mt-4 mb-4"
-            :type="!authStore.is_authenticated ? 'warning' : 'success'"
+            :type="is_error ? 'warning' : 'success'"
             v-text="message"
           />
           <v-btn
@@ -181,7 +186,7 @@
             class="mt-2"
             @click="changeMode()"
             block
-          />
+          >Ir a iniciar sesión <v-icon icon="mdi-chevron-right"/></v-btn>
         </v-form>
       </v-sheet>
     </v-col>
