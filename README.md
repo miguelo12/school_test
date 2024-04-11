@@ -1,22 +1,33 @@
 # school_test
 flask | docker | redis | mysql
 
-# Init
 ## Alembic
-- python3 -m venv aplicacion/.env
-- source aplicacion/.env/bin/activate
-- pip install wheel
-- pip install -r aplicacion/requirements.txt
-- alembic upgrade head
+```bash
+# Crear el env
+python3 -m venv aplicacion/.env
+# Activar el env
+source aplicacion/.env/bin/activate
+# Instalar el wheel para descargar los ultimos paquetes
+pip install wheel
+# Instalar los requirements
+pip install -r aplicacion/requirements.txt
+# Actualizar la base de datos
+alembic upgrade head
+```
 
 ## Server/docker
-- docker-compose up
+```bash
+# Para levantar por primera vez el docker
+docker-compose up
+# En el caso de actualizar el codigo
+docker-compose up --build
+```
 
-Add secrets.py to the 'aplicacion' folder
+Es necesario agregar el secrets.py a la carpeta 'aplicacion'
 
-Localhost:5000 by default
+Por defecto queda disponible en el puerto 5000 del localhost
 
-
+# Changes
 Los cambios que se hicieron:
 
 - Se agrego swagger. localhost:5000/apidocs
