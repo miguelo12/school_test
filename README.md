@@ -5,12 +5,16 @@ flask | docker | redis | mysql
 ```bash
 # Crear el env
 python3 -m venv aplicacion/.env
+
 # Activar el env
 source aplicacion/.env/bin/activate
+
 # Instalar el wheel para descargar los ultimos paquetes
 pip install wheel
+
 # Instalar los requirements
 pip install -r aplicacion/requirements.txt
+
 # Actualizar la base de datos
 alembic upgrade head
 ```
@@ -19,6 +23,7 @@ alembic upgrade head
 ```bash
 # Para levantar por primera vez el docker
 docker-compose up
+
 # En el caso de actualizar el codigo
 docker-compose up --build
 ```
