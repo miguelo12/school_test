@@ -1,9 +1,0 @@
-<template>
-  <v-layout>
-    <AppHeader />
-    <v-main>
-      <slot />
-    </v-main>
-    <AppFooter />
-  </v-layout>
-</template>

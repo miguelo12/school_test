@@ -13,6 +13,11 @@ export default createConfigForNuxt({
     rules: { 'vue/multi-word-component-names': 'off' },
   },
   {
+    rules: { 'vue/valid-v-slot': ['error', {
+      allowModifiers: true,
+    }] },
+  },
+  {
     ignores: ['packages-legacy/**'],
   },
   {

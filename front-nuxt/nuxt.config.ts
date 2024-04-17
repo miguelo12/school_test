@@ -3,12 +3,17 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
   ssr: false,
+  srcDir: 'src/presentation/',
+  devtools: { enabled: true },
   runtimeConfig: {
     public: {
       apiBaseUrl: 'http://localhost:5000',
     },
   },
-  devtools: { enabled: true },
+  imports: {
+    dirs: [
+    ],
+  },
   build: {
     transpile: ['vuetify'],
   },
@@ -24,7 +29,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
   ],
   pinia: {
-    storesDirs: ['./stores/**'],
+    storesDirs: ['./src/domain/stores/**'],
   },
   vite: {
     vue: {
@@ -49,5 +54,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-
+  typescript: {
+    typeCheck: false,
+  },
 })

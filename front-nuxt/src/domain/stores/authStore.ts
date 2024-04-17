@@ -1,27 +1,20 @@
 import { useStorage } from '@vueuse/core'
-import { fetchCreateUser, fetchLogIn, fetchLogOut } from '~/services/authService'
+import AuthUseCase from '../useCases/authUseCase'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: useStorage('token', false),
+    token: useStorage('token', ''),
     is_authenticated: useStorage('is_authenticated', false),
     username: useStorage('username', ''),
   }),
   actions: {
     async createUser(username: string, password: string) {
-      let is_failed = false
-      const { _, message } = await fetchCreateUser(username, password).catch(
-        (err) => {
-          is_failed = true
-          return err.data
-        },
-      )
-      return { message, is_failed }
+      const authUseCase = new AuthUseCase()
+      return await authUseCase.createUser(username, password)
     },
     async logIn(username: string, password: string) {
-      const { data, message } = await fetchLogIn(username, password).catch(
-        err => err.data,
-      )
+      const authUseCase = new AuthUseCase()
+      const { data, message } = await authUseCase.logIn(username, password)
 
       if (data && data.token) {
         this.token = data.token
@@ -37,11 +30,10 @@ export const useAuthStore = defineStore('auth', {
       return message
     },
     async logOut() {
-      const token: string | null = localStorage.getItem('token')
-      if (!token) return
-      await fetchLogOut(token).catch(
-        err => err.data,
-      )
+      const authUseCase = new AuthUseCase()
+      if (this.token) {
+        await authUseCase.logOut(this.token)
+      }
       this.is_authenticated = false
       localStorage.clear()
       navigateTo('/login')
