@@ -1,8 +1,10 @@
+import { injectable } from 'inversify'
 import AuthApi from '../api/authApi'
 import type { authLoginModel } from '../model/authModel'
 import type { BaseModel } from '../model/baseModel'
 import type { authRepositoryInterface } from './interface/authRepositoryInterface'
 
+@injectable()
 class AuthRepository implements authRepositoryInterface {
   private authApi: AuthApi
   constructor() {

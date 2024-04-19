@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   ssr: false,
   srcDir: 'src/presentation/',
   devtools: { enabled: true },
+  plugins: [],
   runtimeConfig: {
     public: {
       apiBaseUrl: 'http://localhost:5000',
@@ -31,7 +32,25 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./src/domain/stores/**'],
   },
+  nitro: {
+    esbuild: {
+      options: {
+        tsconfigRaw: {
+          compilerOptions: {
+            experimentalDecorators: true,
+          },
+        },
+      },
+    },
+  },
   vite: {
+    esbuild: {
+      tsconfigRaw: {
+        compilerOptions: {
+          experimentalDecorators: true,
+        },
+      },
+    },
     vue: {
       template: {
         transformAssetUrls,

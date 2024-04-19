@@ -1,11 +1,11 @@
+import { injectable, inject } from 'inversify'
+import { CONTAINER } from '../types/container'
 import type { authLoginModel } from '~~/src/data/model/authModel'
-import AuthRepository from '~~/src/data/repository/authRepository'
+import type AuthRepository from '~~/src/data/repository/authRepository'
 
+@injectable()
 class AuthUseCase {
-  private authRepository: AuthRepository
-  constructor() {
-    this.authRepository = new AuthRepository()
-  }
+  constructor(@inject(CONTAINER.AuthRepository) private authRepository: AuthRepository) {}
 
   async createUser(username: string, password: string): Promise<{ message: string, is_failed: boolean }> {
     let is_failed = false
