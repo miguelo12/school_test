@@ -1,5 +1,5 @@
-import type { authLoginModel } from '../../model/authModel'
-import type { BaseModel } from '../../model/baseModel'
+import type { authLoginModel } from '@Data/model/authModel'
+import type { BaseModel } from '@Data/model/baseModel'
 
 export interface authRepositoryInterface {
   createUser(username: string, password: string): Promise<BaseModel<object>>

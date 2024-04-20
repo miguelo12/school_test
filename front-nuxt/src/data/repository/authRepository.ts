@@ -1,8 +1,8 @@
 import { injectable } from 'inversify'
-import AuthApi from '../api/authApi'
-import type { authLoginModel } from '../model/authModel'
-import type { BaseModel } from '../model/baseModel'
-import type { authRepositoryInterface } from './interface/authRepositoryInterface'
+import AuthApi from '@Data/api/authApi'
+import type { authLoginModel } from '@Data/model/authModel'
+import type { BaseModel } from '@Data/model/baseModel'
+import type { authRepositoryInterface } from '@Data/repository/interface/authRepositoryInterface'
 
 @injectable()
 class AuthRepository implements authRepositoryInterface {

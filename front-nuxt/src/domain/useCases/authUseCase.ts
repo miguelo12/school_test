@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify'
-import { CONTAINER } from '../types/container'
-import type { authLoginModel } from '~~/src/data/model/authModel'
-import type AuthRepository from '~~/src/data/repository/authRepository'
+import type AuthRepository from '@Data/repository/authRepository'
+import type { authLoginModel } from '@Data/model/authModel'
+import { CONTAINER } from '@Domain/types/container'
 
 @injectable()
 class AuthUseCase {

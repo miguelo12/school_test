@@ -1,6 +1,6 @@
-import type { authLoginModel } from '../model/authModel'
-import type { BaseModel } from '../model/baseModel'
-import BaseAPI from './baseApi'
+import BaseAPI from '@Data/api/baseApi'
+import type { authLoginModel } from '@Data/model/authModel'
+import type { BaseModel } from '@Data/model/baseModel'
 
 class AuthApi extends BaseAPI {
   async CreateUser(username: string, password: string) {

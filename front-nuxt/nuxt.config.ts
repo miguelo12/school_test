@@ -1,11 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
+const srcName: string = 'src'
+
 export default defineNuxtConfig({
   ssr: false,
-  srcDir: 'src/presentation/',
+  srcDir: `${srcName}/presentation/`,
   devtools: { enabled: true },
-  plugins: [],
+  alias: {
+    '@Data': `../${srcName}/data`,
+    '@Domain': `../${srcName}/domain`,
+    '@Presentation': `../${srcName}/presentation`,
+  },
   runtimeConfig: {
     public: {
       apiBaseUrl: 'http://localhost:5000',
